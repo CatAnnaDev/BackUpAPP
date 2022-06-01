@@ -1,4 +1,5 @@
 ﻿using BackUpAPP.GetDirectorySize;
+using BackUpAPP.Logger;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,13 +24,13 @@ namespace BackUpAPP.CopyProcess
                 TotalSize += DirSize.DirSizes(new DirectoryInfo(s));
             }
 
-            Debug.WriteLine($"\nTotal Backup Size: {DirSize.SizeSuffix(TotalSize)}");
+            RichLogger.Log($"\nTotal Backup Size: {DirSize.SizeSuffix(TotalSize)}");
 
             foreach (string s in folders)
             {
                 desktop = Directory.GetDirectories(s);
                 files = Directory.GetFiles(s, "*.*", SearchOption.TopDirectoryOnly);
-                Console.WriteLine($"Path: {s} Folders: {desktop.Count()} Files: {files.Count()} size {DirSize.SizeSuffix(DirSize.DirSizes(new DirectoryInfo(s)))}");
+                RichLogger.Log($"Path: {s} Folders: {desktop.Count()} Files: {files.Count()} size {DirSize.SizeSuffix(DirSize.DirSizes(new DirectoryInfo(s)))}");
                 folderName = new FileInfo(s).Name;
                 string EndPath = Path.Combine(targetPath, folderName);
                 Directory.CreateDirectory(EndPath);

@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BackUpAPP.Config
@@ -18,6 +16,7 @@ namespace BackUpAPP.Config
             {
                 json = JsonConvert.SerializeObject(GenerateNewConfig(), Formatting.Indented);
                 File.WriteAllText("Config.json", json, new UTF8Encoding(false));
+                
                 await Task.Delay(50);
             }
 

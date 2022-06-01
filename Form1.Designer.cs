@@ -32,9 +32,15 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
-            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox1
@@ -52,9 +58,9 @@
             // 
             this.button1.Location = new System.Drawing.Point(423, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(83, 23);
+            this.button1.Size = new System.Drawing.Size(97, 23);
             this.button1.TabIndex = 1;
-            this.button1.Text = "Sart backup";
+            this.button1.Text = "Sart Backup";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -80,16 +86,94 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // fileSystemWatcher1
+            // richTextBox1
             // 
-            this.fileSystemWatcher1.EnableRaisingEvents = true;
-            this.fileSystemWatcher1.SynchronizingObject = this;
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.Location = new System.Drawing.Point(423, 280);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(365, 156);
+            this.richTextBox1.TabIndex = 4;
+            this.richTextBox1.Text = "";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(423, 41);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(97, 23);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "Winget Backup";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(423, 70);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(97, 23);
+            this.button5.TabIndex = 6;
+            this.button5.Text = "Choco Backup";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(526, 41);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(97, 23);
+            this.button6.TabIndex = 7;
+            this.button6.Text = "Winget Import";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(526, 70);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(97, 23);
+            this.button7.TabIndex = 8;
+            this.button7.Text = "Choco Import";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(629, 41);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(97, 23);
+            this.button8.TabIndex = 9;
+            this.button8.Text = "Install Winget";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(629, 70);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(97, 23);
+            this.button9.TabIndex = 10;
+            this.button9.Text = "Install Choco";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 472);
+            this.Controls.Add(this.button9);
+            this.Controls.Add(this.button8);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -100,7 +184,6 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyPress);
-            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -111,7 +194,14 @@
         private Button button1;
         private Button button2;
         private Button button3;
+        private RichTextBox richTextBox1;
+        private Button button5;
+        private Button button4;
+        private Button button6;
+        private Button button7;
+        private OpenFileDialog openFileDialog1;
         private SaveFileDialog saveFileDialog1;
-        private FileSystemWatcher fileSystemWatcher1;
+        private Button button8;
+        private Button button9;
     }
 }
