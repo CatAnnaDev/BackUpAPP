@@ -5,6 +5,7 @@ using BackUpAPP.GetDirectorySize;
 using BackUpAPP.Logger;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -260,6 +261,40 @@ namespace BackUpAPP
             await Exec("cmd.exe", $"start ms-windows-store://pdp/?ProductId=9NBLGGH4NNS1");
         }
 
+        // Download Win11 ISO 
+        private async void button11_Click(object sender, EventArgs e)
+        {
+            // set lang && set edition
+            // https://www.microsoft.com/fr-fr/software-download/windows11
+            // MediaCreationToolW11.exe /Eula Accept /Retail /MediaArch x64 /MediaLangCode en-US /MediaEdition Pro
+
+            string remoteUri = "https://go.microsoft.com/fwlink/?linkid=2156295";
+            string fileName = "MediaCreationToolW11.exe";
+            WebClient myWebClient = new WebClient();
+            RichLogger.Log($"Downloading File {fileName}");
+            myWebClient.DownloadFile(remoteUri, fileName);
+            RichLogger.Log($"Successfully Downloaded File {fileName}");
+            
+            await Exec("cmd", $"MediaCreationToolW10.exe");
+        }
+
+        // Download Win10 ISO 
+        private async void button10_Click(object sender, EventArgs e)
+        {
+            // set lang && set edition
+            // https://www.microsoft.com/fr-fr/software-download/windows10
+            // MediaCreationTool21H2.exe /Eula Accept /Retail /MediaArch x64 /MediaLangCode en-US /MediaEdition Pro
+
+            string remoteUri = "https://go.microsoft.com/fwlink/?LinkId=691209";
+            string fileName = "MediaCreationTool21H2.exe";
+            WebClient myWebClient = new WebClient();
+            RichLogger.Log($"Downloading File {fileName}");
+            myWebClient.DownloadFile(remoteUri, fileName);
+            RichLogger.Log($"Successfully Downloaded File {fileName}");
+
+            await Exec("cmd", $"MediaCreationTool21H2.exe");
+        }
+
         // Exec CMD
         private static Task Exec(string filename, string cmd)
         {
@@ -273,5 +308,7 @@ namespace BackUpAPP
             process.WaitForExit();
             return Task.CompletedTask;
         }
+
+
     }
 }
