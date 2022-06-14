@@ -1,6 +1,7 @@
 using BackUpAPP.Config;
 using BackUpAPP.CopyProcess;
 using BackUpAPP.GetDirectory;
+using BackUpAPP.GetDirectorySize;
 using BackUpAPP.Logger;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -87,15 +88,22 @@ namespace BackUpAPP
         // Ask to start backup
         public static string backupfolderPath = "";
         private void button1_Click(object sender, EventArgs e)
-        {
-            const string message = "Do you want start the backup process ?";
-            const string caption = "Starting Backup";
+        {           
+            List<string> tmp = new();
+            for (int i = 0; i < listBox1.Items.Count; i++)
+                tmp.Add(listBox1.Items[i].ToString());
+            var total = DataCopy.GetSize(tmp.ToArray(), true);
+            var cmp = DataCopy.GetSize(tmp.ToArray(), false);
 
+            DriveInfo dDrive;
+           
             if (listBox1.Items.Count == 0)
+            {
                 MessageBox.Show("Please select folders befor starting");
+                return;
+            }
             else
             {
-
                 using (var fbd = new FolderBrowserDialog())
                 {
                     fbd.InitialDirectory = @"C:\";
@@ -108,11 +116,21 @@ namespace BackUpAPP
                         if (PathValidation.IsMatch(fbd.SelectedPath))
                         {
                             backupfolderPath = fbd.SelectedPath;
-                            var msg = MessageBox.Show(message, caption,MessageBoxButtons.YesNo,MessageBoxIcon.Question);
 
-                            if (msg == DialogResult.Yes)
+                            dDrive = new DriveInfo(backupfolderPath.Substring(0, 1));
+                            
+                            string message = $"Do you want start the backup process ?\nBe sure you've enough space \nBackup Size {total} Free Space {DirSize.SizeSuffix(dDrive.TotalFreeSpace)}";
+                            string caption = "Starting Backup";
+
+                            var msg = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            label1.Text = backupfolderPath;
+                            if (msg == DialogResult.Yes && long.Parse(cmp) < dDrive.TotalFreeSpace)
                             {
-                                startbachup();                            
+                                startbachup();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Not enough space !");
                             }
                         }
                         else
@@ -156,7 +174,7 @@ namespace BackUpAPP
                     }
                 }
             }
-            await Exec("cmd.exe", $"winget export -o {backupfolderPath}\\WinGet.json");
+           await Exec("cmd.exe", $"winget export -o {backupfolderPath}\\WinGet.json");
         }
 
         // Chocolatey Backup
@@ -189,20 +207,6 @@ namespace BackUpAPP
             // Make a Chocolatey export 
             await Exec("cmd.exe", $"choco export --output-file-path=\"'{backupfolderPath}\\ChocolateyBackup.config'\"");
         }
-
-        // Exec CMD
-        private static Task Exec(string filename, string cmd)
-        {
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.WindowStyle = ProcessWindowStyle.Normal;
-            startInfo.FileName = filename;
-            startInfo.Arguments = $"/C " + cmd;
-            process.StartInfo = startInfo;
-            process.Start();
-            process.WaitForExit();
-            return Task.CompletedTask;
-        }
         
         // Winget Import .JSON
         private async void button6_Click(object sender, EventArgs e)
@@ -224,6 +228,7 @@ namespace BackUpAPP
             }
         }
 
+        // Chocolatey Import .config
         private async void button7_Click(object sender, EventArgs e)
         {
             var filePath = string.Empty;
@@ -243,14 +248,30 @@ namespace BackUpAPP
             }
         }
 
+        // Chocolatey install 
         private async void button9_Click(object sender, EventArgs e)
         {
             await Exec("powershell.exe", "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iwr https://community.chocolatey.org/install.ps1 -UseBasicParsing | iex");
         }
 
+        // winget install
         private async void button8_Click(object sender, EventArgs e)
         {
             await Exec("cmd.exe", $"start ms-windows-store://pdp/?ProductId=9NBLGGH4NNS1");
+        }
+
+        // Exec CMD
+        private static Task Exec(string filename, string cmd)
+        {
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            startInfo.FileName = filename;
+            startInfo.Arguments = $"/C " + cmd;
+            process.StartInfo = startInfo;
+            process.Start();
+            process.WaitForExit();
+            return Task.CompletedTask;
         }
     }
 }

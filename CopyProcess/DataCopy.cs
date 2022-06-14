@@ -67,5 +67,19 @@ namespace BackUpAPP.CopyProcess
             }
             catch { }
         }
+
+        static public string GetSize(string[] folders, bool type)
+        {
+            long TotalSize = 0;
+
+            foreach (string s in folders)
+            {
+                TotalSize += DirSize.DirSizes(new DirectoryInfo(s));
+            }
+            if (type)
+                return DirSize.SizeSuffix(TotalSize);
+            else
+                return TotalSize.ToString();
+        }
     }
 }
