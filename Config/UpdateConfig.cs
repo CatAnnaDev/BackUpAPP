@@ -32,5 +32,10 @@ namespace BackUpAPP.Config
         {
             Path = tmp
         };
+
+        public static ConfigData UpdatePath(string tmp) => new ConfigData // WIP
+        {
+            BackUpPath = "",
+        };
     }
 }

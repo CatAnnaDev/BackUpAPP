@@ -21,6 +21,7 @@ namespace BackUpAPP
 
         private async void Form1_Load(object sender, EventArgs e)
         {
+
             // Init Config File
             _configinit = new ConfigInit();
             await _configinit.InitializeAsync();
@@ -35,7 +36,10 @@ namespace BackUpAPP
                 if (!matchingvalues)
                     listBox1.Items.Add(data);
             }
-            
+
+            // get backup size at launch
+            label2.Text = $"BackupSize: {BackupSize()}";
+
         }
 
         // Update config file with new path or removed
@@ -76,6 +80,7 @@ namespace BackUpAPP
                         MessageBox.Show("Path exist already");
 
                 }
+                label2.Text = $"BackupSize: {BackupSize()}";
             }
         }
 
@@ -84,6 +89,7 @@ namespace BackUpAPP
         {
             if(listBox1.SelectedIndex != -1)
                 listBox1.Items.RemoveAt(listBox1.SelectedIndex);
+            label2.Text = $"BackupSize: {BackupSize()}";
         }
 
         // Ask to start backup
@@ -93,7 +99,7 @@ namespace BackUpAPP
             List<string> tmp = new();
             for (int i = 0; i < listBox1.Items.Count; i++)
                 tmp.Add(listBox1.Items[i].ToString());
-            var total = DataCopy.GetSize(tmp.ToArray(), true);
+            var total = DataCopy.GetSize(tmp.ToArray());
             var cmp = DataCopy.GetSize(tmp.ToArray(), false);
 
             DriveInfo dDrive;
@@ -117,10 +123,11 @@ namespace BackUpAPP
                         if (PathValidation.IsMatch(fbd.SelectedPath))
                         {
                             backupfolderPath = fbd.SelectedPath;
+                            UpdateConfig.UpdatePath(fbd.SelectedPath); // WIP
 
                             dDrive = new DriveInfo(backupfolderPath.Substring(0, 1));
                             
-                            string message = $"Do you want start the backup process ?\nBe sure you've enough space \nBackup Size {total} Free Space {DirSize.SizeSuffix(dDrive.TotalFreeSpace)}";
+                            string message = $"Do you want start the backup process ?\nBe sure you've enough space \nBackup Size {BackupSize()} Free Space {DirSize.SizeSuffix(dDrive.TotalFreeSpace)}";
                             string caption = "Starting Backup";
 
                             var msg = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -308,7 +315,32 @@ namespace BackUpAPP
             process.WaitForExit();
             return Task.CompletedTask;
         }
+        
+        private string BackupSize()
+        {
+            List<string> tmp = new();
+            for (int i = 0; i < listBox1.Items.Count; i++)
+                tmp.Add(listBox1.Items[i].ToString());
+            return DataCopy.GetSize(tmp.ToArray());
+        }
 
+        private void listBox1_DragDrop(object sender, DragEventArgs e)
+        {
+            List<string> filepaths = new List<string>();
+            foreach (var s in (string[])e.Data.GetData(DataFormats.FileDrop, false))
+            {
+                if (Directory.Exists(s))
+                {
+                    //Add files from folder
+                    filepaths.AddRange(Directory.GetFiles(s));
+                }
+                else
+                {
+                    //Add filepath
+                    filepaths.Add(s);
+                }
+            }
+        }
 
     }
 }

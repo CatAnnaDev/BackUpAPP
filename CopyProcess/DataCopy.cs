@@ -24,7 +24,7 @@ namespace BackUpAPP.CopyProcess
                 TotalSize += DirSize.DirSizes(new DirectoryInfo(s));
             }
 
-            RichLogger.Log($"\nTotal Backup Size: {DirSize.SizeSuffix(TotalSize)}");
+            //RichLogger.Log($"\nTotal Backup Size: {DirSize.SizeSuffix(TotalSize)}");
 
             foreach (string s in folders)
             {
@@ -68,7 +68,7 @@ namespace BackUpAPP.CopyProcess
             catch { }
         }
 
-        static public string GetSize(string[] folders, bool type)
+        static public string GetSize(string[] folders, bool type = true)
         {
             long TotalSize = 0;
 

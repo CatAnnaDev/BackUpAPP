@@ -26,7 +26,9 @@ namespace BackUpAPP.Config
 
         private static ConfigData GenerateNewConfig() => new ConfigData
         {
+            BackUpPath = "", // WIP
             Path = new string[] {  }
+            
         };
     }
 }
