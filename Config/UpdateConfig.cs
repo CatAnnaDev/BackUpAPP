@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BackUpAPP.Config
 {
@@ -17,7 +13,7 @@ namespace BackUpAPP.Config
             foreach (var data in item.Items)
             {
                 list.Add((string)data);
-            }       
+            }
 
             var json = string.Empty;
 

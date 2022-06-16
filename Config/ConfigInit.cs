@@ -16,7 +16,7 @@ namespace BackUpAPP.Config
             {
                 json = JsonConvert.SerializeObject(GenerateNewConfig(), Formatting.Indented);
                 File.WriteAllText("Config.json", json, new UTF8Encoding(false));
-                
+
                 await Task.Delay(50);
             }
 
@@ -27,8 +27,8 @@ namespace BackUpAPP.Config
         private static ConfigData GenerateNewConfig() => new ConfigData
         {
             BackUpPath = "", // WIP
-            Path = new string[] {  }
-            
+            Path = new string[] { }
+
         };
     }
 }

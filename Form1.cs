@@ -3,10 +3,8 @@ using BackUpAPP.CopyProcess;
 using BackUpAPP.GetDirectory;
 using BackUpAPP.GetDirectorySize;
 using BackUpAPP.Logger;
-using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace BackUpAPP
@@ -25,10 +23,10 @@ namespace BackUpAPP
             // Init Config File
             _configinit = new ConfigInit();
             await _configinit.InitializeAsync();
-            
+
             // Add known Folders in config file
             ConfigInit.Config.Path = KnownFolders.GetPath().ToArray();
-            
+
             // Add folders in listbox
             foreach (var data in ConfigInit.Config.Path)
             {
@@ -51,7 +49,7 @@ namespace BackUpAPP
         // Detect delete keycode to remove item in listbox
         private void Form1_KeyPress(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Delete)
+            if (e.KeyCode == Keys.Delete)
             {
                 if (listBox1.SelectedIndex != -1)
                 {
@@ -74,7 +72,7 @@ namespace BackUpAPP
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
                     var matchingvalues = listBox1.Items.Contains(fbd.SelectedPath);
-                    if(!matchingvalues)
+                    if (!matchingvalues)
                         listBox1.Items.Add(fbd.SelectedPath);
                     else
                         MessageBox.Show("Path exist already");
@@ -87,7 +85,7 @@ namespace BackUpAPP
         // delete item
         private void button3_Click(object sender, EventArgs e)
         {
-            if(listBox1.SelectedIndex != -1)
+            if (listBox1.SelectedIndex != -1)
                 listBox1.Items.RemoveAt(listBox1.SelectedIndex);
             label2.Text = $"BackupSize: {BackupSize()}";
         }
@@ -95,7 +93,7 @@ namespace BackUpAPP
         // Ask to start backup
         public static string backupfolderPath = "";
         private void button1_Click(object sender, EventArgs e)
-        {           
+        {
             List<string> tmp = new();
             for (int i = 0; i < listBox1.Items.Count; i++)
                 tmp.Add(listBox1.Items[i].ToString());
@@ -103,7 +101,7 @@ namespace BackUpAPP
             var cmp = DataCopy.GetSize(tmp.ToArray(), false);
 
             DriveInfo dDrive;
-           
+
             if (listBox1.Items.Count == 0)
             {
                 MessageBox.Show("Please select folders befor starting");
@@ -126,7 +124,7 @@ namespace BackUpAPP
                             UpdateConfig.UpdatePath(fbd.SelectedPath); // WIP
 
                             dDrive = new DriveInfo(backupfolderPath.Substring(0, 1));
-                            
+
                             string message = $"Do you want start the backup process ?\nBe sure you've enough space \nBackup Size {BackupSize()} Free Space {DirSize.SizeSuffix(dDrive.TotalFreeSpace)}";
                             string caption = "Starting Backup";
 
@@ -162,7 +160,7 @@ namespace BackUpAPP
         // Winget Backup
         private async void button4_Click(object sender, EventArgs e)
         {
-            if(backupfolderPath == string.Empty)
+            if (backupfolderPath == string.Empty)
             {
                 using (var fbd = new FolderBrowserDialog())
                 {
@@ -182,7 +180,7 @@ namespace BackUpAPP
                     }
                 }
             }
-           await Exec("cmd.exe", $"winget export -o {backupfolderPath}\\WinGet.json");
+            await Exec("cmd.exe", $"winget export -o {backupfolderPath}\\WinGet.json");
         }
 
         // Chocolatey Backup
@@ -208,14 +206,14 @@ namespace BackUpAPP
                     }
                 }
             }
-            
+
             // Chocolatey upgrade
             await Exec("cmd.exe", $"choco upgrade chocolatey -y");
-            
+
             // Make a Chocolatey export 
             await Exec("cmd.exe", $"choco export --output-file-path=\"'{backupfolderPath}\\ChocolateyBackup.config'\"");
         }
-        
+
         // Winget Import .JSON
         private async void button6_Click(object sender, EventArgs e)
         {
@@ -281,7 +279,7 @@ namespace BackUpAPP
             RichLogger.Log($"Downloading File {fileName}");
             myWebClient.DownloadFile(remoteUri, fileName);
             RichLogger.Log($"Successfully Downloaded File {fileName}");
-            
+
             await Exec("cmd", $"MediaCreationToolW10.exe");
         }
 
@@ -315,7 +313,7 @@ namespace BackUpAPP
             process.WaitForExit();
             return Task.CompletedTask;
         }
-        
+
         private string BackupSize()
         {
             List<string> tmp = new();
