@@ -1,35 +1,87 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Data.Sqlite;
+using Newtonsoft.Json;
 using System.Text;
+using System.Xml.Linq;
 
 namespace BackUpAPP.Config
 {
     internal class ConfigInit
     {
-        public static string ConfigPath { get; set; } = "Config.json";
-        public static ConfigData? Config { get; set; }
 
-        public async Task InitializeAsync()
+        string queryReadFolders = "Select Paths from Paths;";
+        string queryInsertFolder = "INSERT OR IGNORE into Paths (Paths) VALUES(\"{0}\");";
+        string queryDeleteFolders = "DELETE FROM Paths WHERE Paths=\"{0}\";";
+        string CreateTables = "CREATE TABLE \"Paths\" (\"Paths\"TEXT UNIQUE); CREATE TABLE \"Settings\" (\"BackUpPath\" TEXT UNIQUE);";
+
+
+        public static string ConfigPath = "Data Source=Settings.db";
+        public static ConfigData Config { get; set; }
+
+        public void UpdatePathConfig(string Cmd)
         {
-            var json = string.Empty;
-
-            if (!File.Exists(ConfigPath))
+            using (var conn = new SqliteConnection(ConfigPath))
             {
-                json = JsonConvert.SerializeObject(GenerateNewConfig(), Formatting.Indented);
-                File.WriteAllText("Config.json", json, new UTF8Encoding(false));
-
-                await Task.Delay(50);
+                conn.Open();
+                using (var WriteCMD = new SqliteCommand(string.Format(queryDeleteFolders, Cmd), conn))
+                {
+                    WriteCMD.ExecuteNonQuery();
+                }
             }
-
-            json = File.ReadAllText(ConfigPath, new UTF8Encoding(false));
-            Config = JsonConvert.DeserializeObject<ConfigData>(json);
         }
 
-        private static ConfigData GenerateNewConfig() => new ConfigData
+        public void WritePathConfig(string Cmd)
         {
-            BackUpPath = "", // WIP
-            Path = new string[] { }
+            using (var conn = new SqliteConnection(ConfigPath))
+            {
+                conn.Open();
+                using (var WriteCMD = new SqliteCommand(string.Format(queryInsertFolder, Cmd), conn))
+                {
+                    try
+                    {
+                        WriteCMD.ExecuteNonQuery();
+                    }
+                    catch { }
 
-        };
+                }
+            }
+        }
+
+        public List<string> TMPPath = new List<string>();
+
+        public void ReadConfig()
+        {
+
+
+            using (var conn = new SqliteConnection(ConfigPath))
+            {
+
+                if (!File.Exists("Settings.db"))
+                {
+                    conn.Open();
+                    using (var cmd = new SqliteCommand(CreateTables, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                }
+
+                conn.Open();
+
+                using (var cmd = new SqliteCommand(queryReadFolders, conn))
+                {
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        TMPPath.Add(reader.GetString(0));
+                        new ConfigData()
+                        {
+                            Path = TMPPath,
+                            BackUpPath = ""
+                        };
+                    }
+                }
+            }
+        }
     }
 }
 

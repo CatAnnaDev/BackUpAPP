@@ -12,6 +12,7 @@ namespace BackUpAPP
     public partial class Form1 : Form
     {
         private static ConfigInit? _configinit;
+
         public Form1()
         {
             InitializeComponent();
@@ -22,13 +23,20 @@ namespace BackUpAPP
 
             // Init Config File
             _configinit = new ConfigInit();
-            await _configinit.InitializeAsync();
 
-            // Add known Folders in config file
-            ConfigInit.Config.Path = KnownFolders.GetPath().ToArray();
+            // Add Folders from db file
+            _configinit.ReadConfig();
+            if(_configinit.TMPPath.Count == 0)
+                _configinit.TMPPath = KnownFolders.GetPath().ToList();
+            
+
+            foreach (var data in _configinit.TMPPath)
+            {
+                _configinit.WritePathConfig(data);
+            }
 
             // Add folders in listbox
-            foreach (var data in ConfigInit.Config.Path)
+            foreach (var data in _configinit.TMPPath)
             {
                 var matchingvalues = listBox1.Items.Contains(data);
                 if (!matchingvalues)
@@ -53,9 +61,12 @@ namespace BackUpAPP
             {
                 if (listBox1.SelectedIndex != -1)
                 {
+                    string RemoveItem = listBox1.GetItemText(listBox1.SelectedItem);
+                    _configinit.UpdatePathConfig(RemoveItem);
                     listBox1.Items.RemoveAt(listBox1.SelectedIndex);
                     Thread.Sleep(50);
                 }
+                label2.Text = $"BackupSize: {BackupSize()}";
             }
         }
 
@@ -86,7 +97,13 @@ namespace BackUpAPP
         private void button3_Click(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex != -1)
+            {
+                string RemoveItem = listBox1.GetItemText(listBox1.SelectedItem);
+                _configinit.UpdatePathConfig(RemoveItem);
                 listBox1.Items.RemoveAt(listBox1.SelectedIndex);
+                
+            }
+                
             label2.Text = $"BackupSize: {BackupSize()}";
         }
 

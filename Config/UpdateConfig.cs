@@ -1,37 +1,23 @@
-﻿using Newtonsoft.Json;
-using System.Text;
-
-namespace BackUpAPP.Config
+﻿namespace BackUpAPP.Config
 {
     internal class UpdateConfig
     {
+        static ConfigInit cfg;
+
         public static void UpdateConfigFile(ListBox item)
         {
-
-            List<string> list = new List<string>();
+            cfg = new ConfigInit();
 
             foreach (var data in item.Items)
             {
-                list.Add((string)data);
+                cfg.WritePathConfig(data.ToString());
             }
 
-            var json = string.Empty;
-
-            if (File.Exists(ConfigInit.ConfigPath))
-            {
-                json = JsonConvert.SerializeObject(Update(list.ToArray()), Formatting.Indented);
-                File.WriteAllText("Config.json", json, new UTF8Encoding(false));
-            }
         }
 
-        static ConfigData Update(string[] tmp) => new ConfigData
+        internal static void UpdatePath(string selectedPath)
         {
-            Path = tmp
-        };
-
-        public static ConfigData UpdatePath(string tmp) => new ConfigData // WIP
-        {
-            BackUpPath = "",
-        };
+           
+        }
     }
 }

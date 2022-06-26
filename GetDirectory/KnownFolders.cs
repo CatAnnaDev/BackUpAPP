@@ -3,6 +3,10 @@ using System.Runtime.InteropServices;
 
 namespace BackUpAPP.GetDirectory
 {
+
+    
+
+
     public enum KnownFolder
     {
         Contacts,
@@ -20,6 +24,7 @@ namespace BackUpAPP.GetDirectory
 
     public static class KnownFolders
     {
+        static ConfigData Config { get; set; }
 
         [DllImport("shell32", CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = false)]
         private static extern string SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid, uint dwFlags, nint hToken = 0);
@@ -51,14 +56,14 @@ namespace BackUpAPP.GetDirectory
 
         public static List<string> GetPath()
         {
-            foreach (var jsonpath in ConfigInit.Config.Path)
+/*            foreach (var jsonpath in Config.Path)
             {
                 if (!check(jsonpath))
                 {
                     allPath.Add(jsonpath);
                 }
 
-            }
+            }*/
 
             foreach (KeyValuePair<KnownFolder, string> entry in path)
             {
