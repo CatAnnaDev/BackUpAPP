@@ -20,7 +20,6 @@ namespace BackUpAPP
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-
             // Init Config File
             _configinit = new ConfigInit();
 

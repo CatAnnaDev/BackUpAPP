@@ -3,10 +3,6 @@ using System.Runtime.InteropServices;
 
 namespace BackUpAPP.GetDirectory
 {
-
-    
-
-
     public enum KnownFolder
     {
         Contacts,
@@ -56,14 +52,6 @@ namespace BackUpAPP.GetDirectory
 
         public static List<string> GetPath()
         {
-/*            foreach (var jsonpath in Config.Path)
-            {
-                if (!check(jsonpath))
-                {
-                    allPath.Add(jsonpath);
-                }
-
-            }*/
 
             foreach (KeyValuePair<KnownFolder, string> entry in path)
             {
