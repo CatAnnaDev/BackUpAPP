@@ -1,7 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using Newtonsoft.Json;
-using System.Text;
-using System.Xml.Linq;
 
 namespace BackUpAPP.Config
 {

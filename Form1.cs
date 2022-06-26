@@ -25,9 +25,9 @@ namespace BackUpAPP
 
             // Add Folders from db file
             _configinit.ReadConfig();
-            if(_configinit.TMPPath.Count == 0)
+            if (_configinit.TMPPath.Count == 0)
                 _configinit.TMPPath = KnownFolders.GetPath().ToList();
-            
+
 
             foreach (var data in _configinit.TMPPath)
             {
@@ -100,9 +100,9 @@ namespace BackUpAPP
                 string RemoveItem = listBox1.GetItemText(listBox1.SelectedItem);
                 _configinit.UpdatePathConfig(RemoveItem);
                 listBox1.Items.RemoveAt(listBox1.SelectedIndex);
-                
+
             }
-                
+
             label2.Text = $"BackupSize: {BackupSize()}";
         }
 

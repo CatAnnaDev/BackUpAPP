@@ -17,7 +17,7 @@
 
         internal static void UpdatePath(string selectedPath)
         {
-           
+
         }
     }
 }

@@ -34,7 +34,7 @@ namespace BackUpAPP.CopyProcess
             return Task.CompletedTask;
         }
 
-        static public void CopyFolder(string sourceFolder, string destFolder)
+        public static void CopyFolder(string sourceFolder, string destFolder)
         {
             if (!Directory.Exists(destFolder))
                 Directory.CreateDirectory(destFolder);
@@ -49,6 +49,7 @@ namespace BackUpAPP.CopyProcess
                 }
             }
             catch { };
+
             try
             {
                 string[] folders = Directory.GetDirectories(sourceFolder);
@@ -62,7 +63,7 @@ namespace BackUpAPP.CopyProcess
             catch { }
         }
 
-        static public string GetSize(string[] folders, bool type = true)
+        public static string GetSize(string[] folders, bool type = true)
         {
             long TotalSize = 0;
 
